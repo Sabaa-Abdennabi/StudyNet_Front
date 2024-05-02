@@ -6,6 +6,6 @@ import "./globals.css";
 export default function App() {
 
   return (
-    <Class/>
+    <Home/>
   );
 }

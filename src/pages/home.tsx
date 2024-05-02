@@ -1,10 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/button";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/popover";
+import "../app/globals.css";
+import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
 import {
   CardTitle,
   CardDescription,
@@ -15,8 +11,9 @@ import {
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
+import { Button } from "@/components/button";
 
-export default function Home(){
+export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -32,17 +29,15 @@ export default function Home(){
             >
               Home
             </Link>
-            
+
             <Popover>
               <PopoverTrigger asChild>
                 <Button className="rounded-full" size="icon" variant="ghost">
                   <BellIcon className="w-5 h-5" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="p-0 w-80">
-              </PopoverContent>
+              <PopoverContent className="p-0 w-80"></PopoverContent>
             </Popover>
-            
           </nav>
           <div className="flex items-center gap-2">
             <Link
@@ -59,7 +54,7 @@ export default function Home(){
             </Link>
           </div>
         </div>
-      </header>{" "}
+      </header>
       <main className="flex-1 overflow-auto">
         <section className="container py-12 md:py-24">
           <div className="mx-auto grid max-w-4xl gap-8">
@@ -159,7 +154,6 @@ export default function Home(){
             </div>
           </div>
         </section>
-        
       </main>
       <footer className="flex h-16 shrink-0 items-center border-t bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex w-full max-w-6xl items-center justify-between">
@@ -224,4 +218,3 @@ function BookIcon(props) {
     </svg>
   );
 }
-

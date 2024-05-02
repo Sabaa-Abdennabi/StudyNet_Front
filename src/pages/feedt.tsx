@@ -1,4 +1,6 @@
 import Link from "next/link";
+import "../app/globals.css";
+
 import { Button } from "@/components/button";
 import {
   PopoverTrigger,
@@ -33,7 +35,7 @@ export default function FeedTeacher() {
           <nav className="hidden gap-4 md:flex">
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
-              href={'/home'}
+              href='/feedt'
             >
               Home
             </Link>
@@ -90,6 +92,12 @@ export default function FeedTeacher() {
                 </Card>
               </PopoverContent>
             </Popover>
+            <Link
+              className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
+              href="/class"
+            >
+              Create class
+            </Link>
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
               href="#"

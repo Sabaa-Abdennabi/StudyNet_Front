@@ -1,5 +1,5 @@
 import "../app/globals.css";
-
+import { Footer } from "@/components/Footer";
 import Link from "next/link";
 import { Button } from "@/components/button";
 import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
@@ -32,62 +32,10 @@ export default function Class() {
               Home
             </Link>
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button className="rounded-full" size="icon" variant="ghost">
-                  <BellIcon className="w-5 h-5" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0 w-80">
-                <Card className="shadow-none border-0">
-                  <CardHeader className="border-b">
-                    <CardTitle>Notifications</CardTitle>
-                    <CardDescription>
-                      You have 3 unread messages.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          Your call has been confirmed.
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          5 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          You have a new message!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          1 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          Your subscription is expiring soon!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          2 hours ago
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </PopoverContent>
-            </Popover>
             <div className="flex items-center gap-2">
               <Link
                 className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                href="#"
+                href="/home"
               >
                 Log Out
               </Link>
@@ -124,84 +72,16 @@ export default function Class() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="classStartDate">Start Date</Label>
-                    <Input id="classStartDate" type="date" />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="classEndDate">End Date</Label>
-                    <Input id="classEndDate" type="date" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="classTime">Class Time</Label>
-                    <Input id="classTime" type="time" />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="classLocation">Class Location</Label>
-                    <Input
-                      id="classLocation"
-                      placeholder="Enter the class location"
-                    />
-                  </div>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="classCapacity">Class Capacity</Label>
-                  <Input id="classCapacity" min="1" type="number" />
-                </div>
                 <Button className="w-full">Create Class</Button>
               </CardContent>
             </Card>
           </div>
         </section>
       </main>
-      <footer className="flex h-16 shrink-0 items-center border-t bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
-        <div className="flex w-full max-w-6xl items-center justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            © 2023 studyNet. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
-
-function BellIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-    </svg>
-  );
-}
-
 function BookIcon(props) {
   return (
     <svg

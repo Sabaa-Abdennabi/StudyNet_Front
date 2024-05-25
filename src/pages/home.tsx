@@ -9,37 +9,20 @@ import {
   Card,
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
-import { Label } from "@/components/label";
-import { Input } from "@/components/input";
 import { Button } from "@/components/button";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex w-full max-w-6xl items-center justify-between">
-          <Link className="flex items-center gap-2 font-semibold" href="#">
+          <Link className="flex items-center gap-2 font-semibold" href="/home">
             <BookIcon className="h-6 w-6" />
             <span>studyNet</span>
           </Link>
-          <nav className="hidden gap-4 md:flex">
-            <Link
-              className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
-              href="/home"
-            >
-              Home
-            </Link>
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button className="rounded-full" size="icon" variant="ghost">
-                  <BellIcon className="w-5 h-5" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0 w-80"></PopoverContent>
-            </Popover>
-          </nav>
-          <div className="flex items-center gap-2">
+          
+          <div className="flex items-center gap-4">
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
               href="/login"
@@ -155,27 +138,7 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="flex h-16 shrink-0 items-center border-t bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
-        <div className="flex w-full max-w-6xl items-center justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            © 2023 studyNet. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

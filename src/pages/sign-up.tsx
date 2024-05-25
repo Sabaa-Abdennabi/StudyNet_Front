@@ -1,12 +1,19 @@
 import "../app/globals.css";
-import Link from "next/link"
-import { Button } from "@/components/button"
-import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover"
-import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/card"
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar"
-import { Label } from "@/components/label"
-import { Input } from "@/components/input"
-import { Checkbox } from "@/components/checkbox"
+import Link from "next/link";
+import { Button } from "@/components/button";
+import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
+import {
+  CardTitle,
+  CardDescription,
+  CardHeader,
+  CardContent,
+  Card,
+} from "@/components/card";
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
+import { Label } from "@/components/label";
+import { Input } from "@/components/input";
+import { Checkbox } from "@/components/checkbox";
+import { Footer } from "@/components/Footer";
 
 export default function SignUp() {
   return (
@@ -24,11 +31,8 @@ export default function SignUp() {
             >
               Home
             </Link>
-           
-            <Popover>
-              
-            </Popover>
-            
+
+            <Popover></Popover>
           </nav>
           <div className="flex items-center gap-2">
             <Link
@@ -44,8 +48,12 @@ export default function SignUp() {
         <section className="container py-12 md:py-24">
           <div className="mx-auto grid max-w-4xl gap-8">
             <div className="grid gap-2">
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Sign Up to studyNet</h1>
-              <p className="text-gray-500 dark:text-gray-400">Enter your information to create an account.</p>
+              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Sign Up to studyNet
+              </h1>
+              <p className="text-gray-500 dark:text-gray-400">
+                Enter your information to create an account.
+              </p>
             </div>
             <Card>
               <CardContent className="grid gap-4">
@@ -69,63 +77,35 @@ export default function SignUp() {
                 </div>
                 <div className="grid gap-2">
                   <Label className="flex items-center gap-2">
-                    <Checkbox id="isTeacher" />
+                    <input
+                      type="radio"
+                      id="isTeacher"
+                      name="role"
+                      className="radio"
+                    />
                     I am a teacher
                   </Label>
                   <Label className="flex items-center gap-2">
-                    <Checkbox id="isStudent" />
+                    <input
+                      type="radio"
+                      id="isStudent"
+                      name="role"
+                      className="radio"
+                    />
                     I am a student
                   </Label>
                 </div>
+
                 <Button className="w-full">Sign Up</Button>
               </CardContent>
             </Card>
           </div>
         </section>
       </main>
-      <footer className="flex h-16 shrink-0 items-center border-t bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
-        <div className="flex w-full max-w-6xl items-center justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">© 2023 studyNet. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
-  )
+  );
 }
-
-function BellIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-    </svg>
-  )
-}
-
 
 function BookIcon(props) {
   return (
@@ -143,5 +123,5 @@ function BookIcon(props) {
     >
       <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
     </svg>
-  )
+  );
 }

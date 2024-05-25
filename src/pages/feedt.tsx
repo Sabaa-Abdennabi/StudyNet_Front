@@ -1,12 +1,8 @@
 import Link from "next/link";
 import "../app/globals.css";
-
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/button";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/popover";
+import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
 import {
   CardTitle,
   CardDescription,
@@ -28,70 +24,18 @@ export default function FeedTeacher() {
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex w-full max-w-6xl items-center justify-between">
-          <Link className="flex items-center gap-2 font-semibold" href="#">
+          <Link className="flex items-center gap-2 font-semibold" href="/feedt">
             <BookIcon className="h-6 w-6" />
             <span>studyNet</span>
           </Link>
           <nav className="hidden gap-4 md:flex">
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
-              href='/feedt'
+              href="/feedt"
             >
               Home
             </Link>
-            
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button className="rounded-full" size="icon" variant="ghost">
-                  <BellIcon className="w-5 h-5" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0 w-80">
-                <Card className="shadow-none border-0">
-                  <CardHeader className="border-b">
-                    <CardTitle>Notifications</CardTitle>
-                    <CardDescription>
-                      You have 3 unread messages.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          Your call has been confirmed.
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          5 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          You have a new message!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          1 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          Your subscription is expiring soon!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          2 hours ago
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </PopoverContent>
-            </Popover>
+
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
               href="/class"
@@ -100,13 +44,11 @@ export default function FeedTeacher() {
             </Link>
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
-              href="#"
+              href="/home"
             >
               Logout
             </Link>
-            
           </nav>
-          
         </div>
       </header>
       <main className="flex-1 overflow-auto">
@@ -121,7 +63,7 @@ export default function FeedTeacher() {
               </p>
             </div>
             <div className="grid gap-4">
-            <Card>
+              <Card>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -138,26 +80,6 @@ export default function FeedTeacher() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 1 day ago
-                      </p>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            className="rounded-full"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoveHorizontalIcon className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -168,25 +90,22 @@ export default function FeedTeacher() {
                     In this lecture, we will explore the fundamental data
                     structures and algorithms used in computer science.
                   </p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <ThumbsUpIcon className="w-5 h-5" />
-                      <span className="sr-only">Like</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <MessageCircleIcon className="w-5 h-5" />
-                      <span className="sr-only">Comment</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <ShareIcon className="w-5 h-5" />
-                      <span className="sr-only">Share</span>
-                    </Button>
-                  </div>
                   <div className="mt-4">
                     <Textarea
                       className="w-full rounded-md border border-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
                       placeholder="Add a post or file..."
                     />
+
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Upload multiple files
+                    </label>
+                    <input
+                      className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                      id="multiple_files"
+                      type="file"
+                      multiple
+                    />
+
                     <div className="mt-2 flex justify-end">
                       <Button size="sm">Post</Button>
                     </div>
@@ -212,7 +131,7 @@ export default function FeedTeacher() {
                     </div>
                     <div className="flex items-center gap-2">
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 1 day ago
+                        Posted 2 hours ago
                       </p>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -224,52 +143,26 @@ export default function FeedTeacher() {
                             <MoveHorizontalIcon className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Edit</DropdownMenuItem>
-                          <DropdownMenuItem>Delete</DropdownMenuItem>
-                        </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <h3 className="text-lg font-semibold">
-                    Lecture 2: Data Structures and Algorithms
+                    Lecture 1: Introduction to Computer Science
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400">
-                    In this lecture, we will explore the fundamental data
-                    structures and algorithms used in computer science.
+                    In this lecture, we will cover the fundamentals of computer
+                    science, including hardware, software, and programming
+                    concepts.
                   </p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <ThumbsUpIcon className="w-5 h-5" />
-                      <span className="sr-only">Like</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <MessageCircleIcon className="w-5 h-5" />
-                      <span className="sr-only">Comment</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <ShareIcon className="w-5 h-5" />
-                      <span className="sr-only">Share</span>
-                    </Button>
-                  </div>
-                  <div className="mt-4">
-                    <Textarea
-                      className="w-full rounded-md border border-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
-                      placeholder="Add a post or file..."
-                    />
-                    <div className="mt-2 flex justify-end">
-                      <Button size="sm">Post</Button>
-                    </div>
-                  </div>
                 </CardContent>
               </Card>
-              ;
             </div>
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -1,12 +1,8 @@
 import Link from "next/link";
 import "../app/globals.css";
-
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/button";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/popover";
+import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
 import {
   CardTitle,
   CardDescription,
@@ -27,7 +23,7 @@ export default function Feed() {
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex w-full max-w-6xl items-center justify-between">
-          <Link className="flex items-center gap-2 font-semibold" href="#">
+          <Link className="flex items-center gap-2 font-semibold" href="/feed">
             <BookIcon className="h-6 w-6" />
             <span>studyNet</span>
           </Link>
@@ -38,7 +34,7 @@ export default function Feed() {
             >
               Home
             </Link>
-            
+
             <Popover>
               <PopoverTrigger asChild>
                 <Button className="rounded-full" size="icon" variant="ghost">
@@ -95,7 +91,7 @@ export default function Feed() {
           <div className="flex items-center gap-2">
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-              href="#"
+              href="/home"
             >
               Log out
             </Link>
@@ -135,17 +131,6 @@ export default function Feed() {
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Posted 2 hours ago
                       </p>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            className="rounded-full"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoveHorizontalIcon className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                      </DropdownMenu>
                     </div>
                   </div>
                 </CardHeader>
@@ -158,21 +143,20 @@ export default function Feed() {
                     science, including hardware, software, and programming
                     concepts.
                   </p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <ThumbsUpIcon className="w-5 h-5" />
-                      <span className="sr-only">Like</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <MessageCircleIcon className="w-5 h-5" />
-                      <span className="sr-only">Comment</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <ShareIcon className="w-5 h-5" />
-                      <span className="sr-only">Share</span>
-                    </Button>
-                  </div>
                 </CardContent>
+                <div className="mt-4">
+                  <h4 className="text-md font-medium">Related Files:</h4>
+                  <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
+                    <li>
+                      <a
+                        href="/files/c.pdf"
+                        className="text-blue-500 hover:underline text-md font-medium"
+                      >
+                        First-File.pdf
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </Card>
               <Card>
                 <CardHeader>
@@ -195,17 +179,6 @@ export default function Feed() {
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Posted 1 day ago
                       </p>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            className="rounded-full"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoveHorizontalIcon className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                      </DropdownMenu>
                     </div>
                   </div>
                 </CardHeader>
@@ -217,54 +190,13 @@ export default function Feed() {
                     In this lecture, we will explore the fundamental data
                     structures and algorithms used in computer science.
                   </p>
-                  <div className="mt-4 flex items-center gap-2">
-                    <Button size="icon" variant="ghost">
-                      <ThumbsUpIcon className="w-5 h-5" />
-                      <span className="sr-only">Like</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <MessageCircleIcon className="w-5 h-5" />
-                      <span className="sr-only">Comment</span>
-                    </Button>
-                    <Button size="icon" variant="ghost">
-                      <ShareIcon className="w-5 h-5" />
-                      <span className="sr-only">Share</span>
-                    </Button>
-                  </div>
                 </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          John Doe
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Instructor
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 3 days ago
-                      </p>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild />
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </CardHeader>
               </Card>
             </div>
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

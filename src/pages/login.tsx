@@ -2,21 +2,12 @@ import Link from "next/link";
 import "../app/globals.css";
 
 import { Button } from "@/components/button";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/popover";
-import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  Card,
-} from "@/components/card";
+import { Popover } from "@/components/popover";
+import { CardContent, Card } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
+import { Footer } from "@/components/Footer";
 
 export default function Login() {
   return (
@@ -34,13 +25,8 @@ export default function Login() {
             >
               Home
             </Link>
-            
-            <Popover>
-            </Popover>
-            
           </nav>
           <div className="flex items-center gap-2">
-            
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
               href="/sign-up"
@@ -51,8 +37,7 @@ export default function Login() {
         </div>
       </header>{" "}
       <main className="flex-1 overflow-auto">
-        
-        <section className="container py-12 md:py-24">
+        <section className="container py-8 ">
           <div className="mx-auto grid max-w-4xl gap-8">
             <div className="grid gap-2">
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -62,7 +47,7 @@ export default function Login() {
                 Enter your credentials to access your account.
               </p>
             </div>
-            <Card>
+            <Card >
               <CardContent className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -74,12 +59,7 @@ export default function Login() {
                 </div>
                 <Button className="w-full">Sign In</Button>
                 <div className="flex items-center justify-between">
-                  <Link
-                    className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                    href="#"
-                  >
-                    Forgot password?
-                  </Link>
+                  
                   <Link
                     className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                     href="/sign-up"
@@ -92,27 +72,7 @@ export default function Login() {
           </div>
         </section>
       </main>
-      <footer className="flex h-16 shrink-0 items-center border-t bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
-        <div className="flex w-full max-w-6xl items-center justify-between">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            © 2023 studyNet. All rights reserved.
-          </p>
-          <div className="flex items-center gap-4">
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
-            >
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

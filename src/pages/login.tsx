@@ -8,8 +8,51 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { Footer } from "@/components/Footer";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
+import router from "next/router";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    e.preventDefault();
+    try {
+      console.log(JSON.stringify({ email, password }));
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        console.log(response)
+        console.error("Login failed:", response.statusText);
+        return;
+      }
+      console.log(response)
+      if (response.status === 201) {
+        console.log("Login successful (status 201)");
+        router.push("/home");
+        return;
+      }
+      const result = await response.json();    
+      if (result.ok) {
+
+        console.log("Login successful:", result);
+
+      } else {
+        console.error("Login failed:", result.message);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -47,27 +90,40 @@ export default function Login() {
                 Enter your credentials to access your account.
               </p>
             </div>
-            <Card >
-              <CardContent className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" placeholder="m@example.com" type="email" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" />
-                </div>
-                <Button className="w-full">Sign In</Button>
-                <div className="flex items-center justify-between">
-                  
-                  <Link
-                    className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                    href="/sign-up"
-                  >
-                    Don't have an account? Sign up
-                  </Link>
-                </div>
-              </CardContent>
+            <Card>
+              <form onSubmit={handleLogin}>
+                <CardContent className="grid gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      placeholder="m@example.com"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                  <Button className="w-full">Sign In</Button>
+
+                  <div className="flex items-center justify-between">
+                    <Link
+                      className="text-sm text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                      href="/sign-up"
+                    >
+                      Don't have an account? Sign up
+                    </Link>
+                  </div>
+                </CardContent>
+              </form>
             </Card>
           </div>
         </section>

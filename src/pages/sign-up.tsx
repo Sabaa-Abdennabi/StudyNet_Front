@@ -8,6 +8,7 @@ import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
+import router from "next/router";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -39,7 +40,7 @@ export default function SignUp() {
     const data = await response.json();
     console.log("Response:", data);
     console.log("success");
-    
+    router.push("/login");
   };
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">

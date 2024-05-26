@@ -29,6 +29,7 @@ export default function FeedTeacher() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
+    formData.append('classeName', classe);
     for (let i = 0; i < files.length; i++) {
       formData.append('files', files[i]);
     }

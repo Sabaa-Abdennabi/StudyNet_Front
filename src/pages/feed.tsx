@@ -11,14 +11,44 @@ import {
   Card,
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "@/components/dropdown-menu";
+import { useEffect, useState } from "react";
+
+interface notif {
+  post: string;
+ // user:string;
+  class:string;
+}
+
 
 export default function Feed() {
+  const [notifications, setNotifications] = useState<notif[]>([]); 
+
+  useEffect(() => {
+    
+    console.log("useEffect called");
+    
+    const url = 'http://localhost:3000/posts/sse';
+    const eventSource = new EventSource(url, { withCredentials: true });
+    console.log(eventSource)
+    eventSource.onmessage = (event) => {
+      console.log("Event received:", event.data);
+      const data = JSON.parse(event.data);
+      console.log('Received data:', data);
+      setNotifications((prevNotifications) => [...prevNotifications, data]);
+    };
+    eventSource.onerror = (error) => {
+      console.error('EventSource failed:', error);
+      // You can add additional error handling logic here
+    };
+  
+    console.log("EventSource created");
+    // Cleanup function to close EventSource when the component unmounts
+    return () => {
+      console.log("Cleaning up EventSource");
+      eventSource.close();
+    };
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -49,19 +79,22 @@ export default function Feed() {
                       You have 3 unread messages.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="p-6">
+                  {notifications.map((notification, index) => (
+                  <CardContent  key={index}  className="p-6">
+              
                     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
                       <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
                       <div className="grid gap-1">
                         <p className="text-sm font-medium">
-                          
+                        {notification.class}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          5 min ago
+                        {notification.post}
                         </p>
                       </div>
-                    </div>
+                    </div> 
                   </CardContent>
+                  ))}
                 </Card>
               </PopoverContent>
             </Popover>

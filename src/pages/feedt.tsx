@@ -17,9 +17,46 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from "@/components/dropdown-menu";
-import { Textarea } from "../components/textarea";
-
+import { useState } from "react";
+import { Textarea } from "@/components/textarea";
 export default function FeedTeacher() {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [files, setFiles] = useState([]);
+  const [classe, setClasse] = useState('');
+
+  const handleFileChange = (e) => {
+    setFiles(e.target.files);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('classeName', classe);
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/posts/', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log('Post created successfully:', data);
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -35,7 +72,6 @@ export default function FeedTeacher() {
             >
               Home
             </Link>
-
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
               href="/class"
@@ -83,19 +119,29 @@ export default function FeedTeacher() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <h3 className="text-lg font-semibold">
-                    Lecture 2: Data Structures and Algorithms
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    In this lecture, we will explore the fundamental data
-                    structures and algorithms used in computer science.
-                  </p>
-                  <div className="mt-4">
+                  <form onSubmit={handleSubmit}>
+                    <h3 className="text-lg font-semibold">Create a New Post</h3>
+                    <input
+                      className="w-full rounded-md border border-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
+                      placeholder="Post Title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      required
+                    />
+                    <input
+                      className="w-full rounded-md border border-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
+                      placeholder="Concerned Class"
+                      value={classe}
+                      onChange={(e) => setClasse(e.target.value)}
+                      required
+                    />
                     <Textarea
                       className="w-full rounded-md border border-gray-300 p-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50"
-                      placeholder="Add a post or file..."
+                      placeholder="Post Content"
+                      value={content}
+                      onChange={(e) => setContent(e.target.value)}
+                      required
                     />
-
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Upload multiple files
                     </label>
@@ -104,58 +150,12 @@ export default function FeedTeacher() {
                       id="multiple_files"
                       type="file"
                       multiple
+                      onChange={handleFileChange}
                     />
-
                     <div className="mt-2 flex justify-end">
-                      <Button size="sm">Post</Button>
+                      <Button type="submit" size="sm">Post</Button>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          John Doe
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Instructor
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 2 hours ago
-                      </p>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            className="rounded-full"
-                            size="icon"
-                            variant="ghost"
-                          >
-                            <MoveHorizontalIcon className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <h3 className="text-lg font-semibold">
-                    Lecture 1: Introduction to Computer Science
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    In this lecture, we will cover the fundamentals of computer
-                    science, including hardware, software, and programming
-                    concepts.
-                  </p>
+                  </form>
                 </CardContent>
               </Card>
             </div>
@@ -166,6 +166,7 @@ export default function FeedTeacher() {
     </div>
   );
 }
+
 
 function BellIcon(props) {
   return (

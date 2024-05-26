@@ -4,49 +4,55 @@ import "../app/globals.css";
 import { Button } from "@/components/button";
 import { Popover } from "@/components/popover";
 import { CardContent, Card } from "@/components/card";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { Footer } from "@/components/Footer";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import router from "next/router";
+import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState<DecodedToken | null>(null);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
     e.preventDefault();
     try {
       console.log(JSON.stringify({ email, password }));
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
-        console.log(response)
+        console.log(response);
         console.error("Login failed:", response.statusText);
         return;
       }
-      console.log(response)
+      console.log(response);
       if (response.status === 201) {
         console.log("Login successful (status 201)");
         router.push("/home");
-        return;
       }
-      const result = await response.json();    
-      if (result.ok) {
+      const Token = await response.text();
+      try {
+        //decode the token
+        const decodedToken: DecodedToken = jwtDecode(Token);
+        const { id, role, email } = decodedToken;
 
-        console.log("Login successful:", result);
+        //get the infos needed and set the token in localstorage
+        const userDetails = { id, role, email };
+        localStorage.setItem("token", Token);
 
-      } else {
-        console.error("Login failed:", result.message);
+        //set the user in state
+        localStorage.setItem("user", JSON.stringify(userDetails));
+        
+      } catch (error) {
+        console.error("Failed to decode token:", error);
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -170,4 +176,9 @@ function BookIcon(props) {
       <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
     </svg>
   );
+}
+interface DecodedToken {
+  id: string;
+  role: string;
+  email: string;
 }

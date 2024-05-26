@@ -11,14 +11,37 @@ import {
   Card,
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
-import { useState } from "react";
-import { Textarea } from "@/components/textarea";
-export default function FeedTeacher() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [files, setFiles] = useState([]);
-  const [classe, setClasse] = useState('');
+import {
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuContent,
+  DropdownMenu,
+} from "@/components/dropdown-menu";
+import { useEffect, useState } from "react";
 
+import { Textarea } from "@/components/textarea";
+import { DecodedToken } from "@/lib/interface";
+export default function FeedTeacher() {
+
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [files, setFiles] = useState([]);
+  const [classe, setClasse] = useState("");
+  //retrive the user from the localstorage
+  const [user, setUser] = useState<DecodedToken | null>(null);
+
+//the code needed to get the user from the localstorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const userDetails: DecodedToken = JSON.parse(storedUser);
+      setUser(userDetails);
+      console.log(userDetails);
+    }
+  }, []);
+  
+//the code needed to handle the file change
   const handleFileChange = (e) => {
     setFiles(e.target.files);
   };
@@ -27,27 +50,27 @@ export default function FeedTeacher() {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    formData.append('classeName', classe);
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("classeName", classe);
     for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i]);
+      formData.append("files", files[i]);
     }
 
     try {
-      const response = await fetch('http://localhost:3001/posts/', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3001/posts/", {
+        method: "POST",
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error("Network response was not ok");
       }
 
       const data = await response.json();
-      console.log('Post created successfully:', data);
+      console.log("Post created successfully:", data);
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error("Error creating post:", error);
     }
   };
 
@@ -99,11 +122,11 @@ export default function FeedTeacher() {
                     <div className="flex items-center gap-2">
                       <Avatar>
                         <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
+                        <AvatarFallback>{user ? user.email.slice(0,2).toUpperCase() : "John Doe"}</AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="text-sm font-medium leading-none">
-                          John Doe
+                          {user ? user.email : "John Doe"}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                           Instructor
@@ -147,7 +170,9 @@ export default function FeedTeacher() {
                       onChange={handleFileChange}
                     />
                     <div className="mt-2 flex justify-end">
-                      <Button type="submit" size="sm">Post</Button>
+                      <Button type="submit" size="sm">
+                        Post
+                      </Button>
                     </div>
                   </form>
                 </CardContent>
@@ -160,7 +185,6 @@ export default function FeedTeacher() {
     </div>
   );
 }
-
 
 function BellIcon(props) {
   return (
@@ -201,83 +225,4 @@ function BookIcon(props) {
   );
 }
 
-function MessageCircleIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-    </svg>
-  );
-}
 
-function MoveHorizontalIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="18 8 22 12 18 16" />
-      <polyline points="6 8 2 12 6 16" />
-      <line x1="2" x2="22" y1="12" y2="12" />
-    </svg>
-  );
-}
-
-function ShareIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-      <polyline points="16 6 12 2 8 6" />
-      <line x1="12" x2="12" y1="2" y2="15" />
-    </svg>
-  );
-}
-
-function ThumbsUpIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M7 10v12" />
-      <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z" />
-    </svg>
-  );
-}

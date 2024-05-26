@@ -21,6 +21,7 @@ interface notif {
 
 
 export default function Feed() {
+
   const [notifications, setNotifications] = useState<notif[]>([]); 
 
   useEffect(() => {

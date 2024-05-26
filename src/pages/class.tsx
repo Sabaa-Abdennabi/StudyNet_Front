@@ -14,8 +14,43 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { Textarea } from "@/components/textarea";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function Class() {
+  const router = useRouter();
+  const [className, setClassName] = useState('');
+  const [classDescription, setClassDescription] = useState('');
+  const [level, setLevel] = useState('');
+
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append('className', className);
+      formData.append('classDescription', classDescription);
+      formData.append('level',level)
+
+      const response = await fetch('http://localhost:3001/class/', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      console.log('Post created successfully:', data);
+      router.push('/home'); // Redirect to home page after successful creation
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
+  };
+
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -54,6 +89,7 @@ export default function Class() {
                 Enter the details to create a new class.
               </p>
             </div>
+            <form onSubmit={handleSubmit}>
             <Card>
               <CardContent className="grid gap-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -62,6 +98,8 @@ export default function Class() {
                     <Input
                       id="className"
                       placeholder="Intro to Computer Science"
+                      value={className}
+                      onChange={(e) => setClassName(e.target.value)}
                     />
                   </div>
                   <div className="grid gap-2">
@@ -69,12 +107,24 @@ export default function Class() {
                     <Textarea
                       id="classDescription"
                       placeholder="Enter a description for your class"
+                      value={classDescription}
+                      onChange={(e) => setClassDescription(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="Level">Class Level</Label>
+                    <Input
+                      id="level"
+                      placeholder="MPI"
+                      value={level}
+                      onChange={(e) => setLevel(e.target.value)}
                     />
                   </div>
                 </div>
-                <Button className="w-full">Create Class</Button>
+                <Button type="submit" className="w-full">Create Class</Button>
               </CardContent>
             </Card>
+            </form>
           </div>
         </section>
       </main>

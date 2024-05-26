@@ -20,12 +20,9 @@ export default function Feed() {
   useEffect(() => {
     async function fetchPosts() {
       try {
-        const response = await axios.get<Post[]>('http://localhost:3000/posts', {
-          params: {
-              // Include author and className relations
-              relations: ['Teacher', 'Class'],
-          },
-      });;
+        // Assuming studentId is available through authentication or user context
+        const studentId = "student-id"; // Replace with actual student ID
+        const response = await axios.get<Post[]>(`http://localhost:3000/students/${studentId}/posts`);
         setPosts(response.data);
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -132,10 +129,11 @@ export default function Feed() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Avatar>
-                         
+                          <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
+                          <AvatarFallback>{post.author.name[0]}</AvatarFallback>
                         </Avatar>
                         <div>
-                          
+                          <p className="text-sm font-medium">{post.author.name}</p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
                             Instructor
                           </p>
@@ -149,9 +147,7 @@ export default function Feed() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <h3 className="text-lg font-semibold">
-                      {post.title}
-                    </h3>
+                    <h3 className="text-lg font-semibold">{post.title}</h3>
                     <p className="text-gray-500 dark:text-gray-400">
                       {post.content}
                     </p>
@@ -193,6 +189,10 @@ interface Post {
   title: string;
   content: string;
   files: string[]; // Assuming files is a string, adjust as necessary
+  author: {
+    name: string;
+    avatarUrl: string;
+  };
 }
 
 function BellIcon(props) {

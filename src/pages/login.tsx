@@ -50,7 +50,7 @@ export default function Login() {
 
         //set the user in state
         localStorage.setItem("user", JSON.stringify(userDetails));
-        
+
       } catch (error) {
         console.error("Failed to decode token:", error);
       }

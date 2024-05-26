@@ -27,19 +27,23 @@ export default function FeedTeacher() {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [classe, setClasse] = useState("");
+
   //retrive the user from the localstorage
   const [user, setUser] = useState<DecodedToken | null>(null);
+  const[Token,setToken]=useState<string | null>(null);
 
 //the code needed to get the user from the localstorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+    const token=localStorage.getItem("token");
     if (storedUser) {
+      setToken(token);
       const userDetails: DecodedToken = JSON.parse(storedUser);
       setUser(userDetails);
       console.log(userDetails);
     }
   }, []);
-  
+
 //the code needed to handle the file change
   const handleFileChange = (e) => {
     setFiles(e.target.files);
@@ -59,6 +63,7 @@ export default function FeedTeacher() {
     try {
       const response = await fetch("http://localhost:3001/posts/", {
         method: "POST",
+
         body: formData,
       });
 
@@ -79,7 +84,7 @@ export default function FeedTeacher() {
         <div className="flex w-full max-w-6xl items-center justify-between">
           <Link className="flex items-center gap-2 font-semibold" href="/feedt">
             <BookIcon className="h-6 w-6" />
-            <span>studyNet</span>
+            <span>StudyNet</span>
           </Link>
           <nav className="hidden gap-4 md:flex">
             <Link

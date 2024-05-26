@@ -2,20 +2,46 @@ import "../app/globals.css";
 import Link from "next/link";
 import { Button } from "@/components/button";
 import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
-import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  Card,
-} from "@/components/card";
+import { CardContent, Card } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
-import { Checkbox } from "@/components/checkbox";
 import { Footer } from "@/components/Footer";
+import { useState } from "react";
+import router from "next/router";
 
 export default function SignUp() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (role === "teacher") {
+      var url = "http://localhost:3000/teachers";
+    } else {
+      var url = "http://localhost:3000/students";
+    }
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+      }),
+    });
+
+    const data = await response.json();
+    console.log("Response:", data);
+    console.log("success");
+    router.push("/login");
+  };
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -56,48 +82,77 @@ export default function SignUp() {
               </p>
             </div>
             <Card>
-              <CardContent className="grid gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" placeholder="John" />
+              <form onSubmit={handleSubmit}>
+                <CardContent className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input
+                        id="firstName"
+                        placeholder="John"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input
+                        id="lastName"
+                        placeholder="Doe"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </div>
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" placeholder="Doe" />
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      placeholder="m@example.com"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
                   </div>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" placeholder="m@example.com" type="email" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" />
-                </div>
-                <div className="grid gap-2">
-                  <Label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      id="isTeacher"
-                      name="role"
-                      className="radio"
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
-                    I am a teacher
-                  </Label>
-                  <Label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      id="isStudent"
-                      name="role"
-                      className="radio"
-                    />
-                    I am a student
-                  </Label>
-                </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        id="isTeacher"
+                        name="role"
+                        className="radio"
+                        value="teacher"
+                        checked={role === "teacher"}
+                        onChange={(e) => setRole(e.target.value)}
+                      />
+                      I am a teacher
+                    </Label>
+                    <Label className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        id="isStudent"
+                        name="role"
+                        className="radio"
+                        value="student"
+                        checked={role === "student"}
+                        onChange={(e) => setRole(e.target.value)}
+                      />
+                      I am a student
+                    </Label>
+                  </div>
 
-                <Button className="w-full">Sign Up</Button>
-              </CardContent>
+                  <Button className="w-full">Sign Up</Button>
+                </CardContent>
+              </form>
             </Card>
           </div>
         </section>

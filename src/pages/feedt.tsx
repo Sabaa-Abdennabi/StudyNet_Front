@@ -11,12 +11,6 @@ import {
   Card,
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "@/components/dropdown-menu";
 import { useState } from "react";
 import { Textarea } from "@/components/textarea";
 export default function FeedTeacher() {

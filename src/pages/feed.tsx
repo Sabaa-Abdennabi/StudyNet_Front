@@ -1,7 +1,5 @@
 import Link from "next/link";
 import "../app/globals.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/button";
 import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
@@ -13,11 +11,20 @@ import {
   Card,
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
+import { useEffect, useState } from "react";
+
+interface notif {
+  post: string;
+ // user:string;
+  class:string;
+}
+
 
 export default function Feed() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [notifications, setNotifications] = useState<notif[]>([]); 
 
   useEffect(() => {
+
     async function fetchPosts() {
       try {
         // Assuming studentId is available through authentication or user context
@@ -62,41 +69,22 @@ export default function Feed() {
                       You have 3 unread messages.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="p-6">
+                  {notifications.map((notification, index) => (
+                  <CardContent  key={index}  className="p-6">
+              
                     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
                       <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
                       <div className="grid gap-1">
                         <p className="text-sm font-medium">
-                          Your call has been confirmed.
+                        {notification.class}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          5 min ago
+                        {notification.post}
                         </p>
                       </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          You have a new message!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          1 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          Your subscription is expiring soon!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          2 hours ago
-                        </p>
-                      </div>
-                    </div>
+                    </div> 
                   </CardContent>
+                  ))}
                 </Card>
               </PopoverContent>
             </Popover>
@@ -139,9 +127,52 @@ export default function Feed() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Posted 2 hours ago
+                      </p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <h3 className="text-lg font-semibold">
+                    Lecture 1: Introduction to Computer Science
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    In this lecture, we will cover the fundamentals of computer
+                    science, including hardware, software, and programming
+                    concepts.
+                  </p>
+                </CardContent>
+                <div className="mt-4">
+                  <h4 className="text-md font-medium">Related Files:</h4>
+                  <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
+                    <li>
+                      <a
+                        href="/files/c.pdf"
+                        className="text-blue-500 hover:underline text-md font-medium"
+                      >
+                        First-File.pdf
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Avatar>
+                        <AvatarImage src="/avatars/01.png" />
+                        <AvatarFallback>JD</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-sm font-medium leading-none">
+                          John Doe
+                        </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Posted {new Date(post.createdAt).toLocaleTimeString()}
+                          Instructor
                         </p>
                       </div>
                     </div>
@@ -168,9 +199,18 @@ export default function Feed() {
                         ))}
                       </ul>
                     </div>
-                  )}
-                </Card>
-              ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <h3 className="text-lg font-semibold">
+                    Lecture 2: Data Structures and Algorithms
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    In this lecture, we will explore the fundamental data
+                    structures and algorithms used in computer science.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
@@ -179,7 +219,6 @@ export default function Feed() {
     </div>
   );
 }
-
 interface Post {
   id: string;
   createdAt: string;

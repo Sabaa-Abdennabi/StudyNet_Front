@@ -11,15 +11,35 @@ import {
   Card,
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "@/components/dropdown-menu";
+import { useEffect, useState } from "react";
+
+interface notif {
+  post: string;
+ // user:string;
+  class:string;
+}
+
 
 export default function Feed() {
-  
+
+  const [notifications, setNotifications] = useState<notif[]>([]); 
+
+  useEffect(() => {
+
+    async function fetchPosts() {
+      try {
+        // Assuming studentId is available through authentication or user context
+        const studentId = "student-id"; // Replace with actual student ID
+        const response = await axios.get<Post[]>(`http://localhost:3000/students/${studentId}/posts`);
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -50,41 +70,22 @@ export default function Feed() {
                       You have 3 unread messages.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="p-6">
+                  {notifications.map((notification, index) => (
+                  <CardContent  key={index}  className="p-6">
+              
                     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
                       <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
                       <div className="grid gap-1">
                         <p className="text-sm font-medium">
-                          Your call has been confirmed.
+                        {notification.class}
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          5 min ago
+                        {notification.post}
                         </p>
                       </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          You have a new message!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          1 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-                      <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
-                      <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                          Your subscription is expiring soon!
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          2 hours ago
-                        </p>
-                      </div>
-                    </div>
+                    </div> 
                   </CardContent>
+                  ))}
                 </Card>
               </PopoverContent>
             </Popover>
@@ -111,21 +112,21 @@ export default function Feed() {
               </p>
             </div>
             <div className="grid gap-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          John Doe
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Instructor
-                        </p>
+              {posts.map((post) => (
+                <Card key={post.id}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Avatar>
+                          <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
+                          <AvatarFallback>{post.author.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium">{post.author.name}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Instructor
+                          </p>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -176,10 +177,28 @@ export default function Feed() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 1 day ago
-                      </p>
+                  </CardHeader>
+                  <CardContent>
+                    <h3 className="text-lg font-semibold">{post.title}</h3>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {post.content}
+                    </p>
+                  </CardContent>
+                  {post.files && post.files.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-md font-medium">Related Files:</h4>
+                      <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
+                        {post.files.map((file, index) => (
+                          <li key={index}>
+                            <a
+                              href={file}
+                              className="text-blue-500 hover:underline text-md font-medium"
+                            >
+                              {file}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </CardHeader>
@@ -200,6 +219,20 @@ export default function Feed() {
       <Footer />
     </div>
   );
+}
+interface Post {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isDeleted: boolean;
+  title: string;
+  content: string;
+  files: string[]; // Assuming files is a string, adjust as necessary
+  author: {
+    name: string;
+    avatarUrl: string;
+  };
 }
 
 function BellIcon(props) {

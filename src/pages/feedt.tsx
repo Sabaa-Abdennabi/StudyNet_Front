@@ -22,22 +22,20 @@ import { useEffect, useState } from "react";
 import { Textarea } from "@/components/textarea";
 import { DecodedToken } from "@/lib/interface";
 export default function FeedTeacher() {
-
-
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [classe, setClasse] = useState("");
 
   //retrive the user from the localstorage
-  
-  const [user, setUser] = useState<DecodedToken | null>(null);
-  const[Token,setToken]=useState<string | null>(null);
 
-//the code needed to get the user from the localstorage
+  const [user, setUser] = useState<DecodedToken | null>(null);
+  const [Token, setToken] = useState<string | null>(null);
+
+  //the code needed to get the user from the localstorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    const token=localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (storedUser) {
       setToken(token);
       const userDetails: DecodedToken = JSON.parse(storedUser);
@@ -46,10 +44,14 @@ export default function FeedTeacher() {
     }
   }, []);
 
-//the code needed to handle the file change
+  //the code needed to handle the file change
   const handleFileChange = (e) => {
     setFiles(e.target.files);
   };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,9 +65,11 @@ export default function FeedTeacher() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/posts/", {
+      const response = await fetch("http://localhost:3001/posts", {
         method: "POST",
-
+        headers: {
+          Authorization: `Bearer ${Token}`, // Include the token in the Authorization header
+        },
         body: formData,
       });
 
@@ -104,6 +108,7 @@ export default function FeedTeacher() {
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
               href="/home"
+              onClick={handleLogout}
             >
               Logout
             </Link>
@@ -128,7 +133,11 @@ export default function FeedTeacher() {
                     <div className="flex items-center gap-2">
                       <Avatar>
                         <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>{user ? user.email.slice(0,2).toUpperCase() : "John Doe"}</AvatarFallback>
+                        <AvatarFallback>
+                          {user
+                            ? user.email.slice(0, 2).toUpperCase()
+                            : "John Doe"}
+                        </AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="text-sm font-medium leading-none">
@@ -230,5 +239,3 @@ function BookIcon(props) {
     </svg>
   );
 }
-
-

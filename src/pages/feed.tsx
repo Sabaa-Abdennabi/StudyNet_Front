@@ -1,5 +1,7 @@
 import Link from "next/link";
 import "../app/globals.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/button";
 import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
@@ -11,14 +13,28 @@ import {
   Card,
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "@/components/dropdown-menu";
 
 export default function Feed() {
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const response = await axios.get<Post[]>('http://localhost:3000/posts', {
+          params: {
+              // Include author and className relations
+              relations: ['Teacher', 'Class'],
+          },
+      });;
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
@@ -110,88 +126,55 @@ export default function Feed() {
               </p>
             </div>
             <div className="grid gap-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          John Doe
-                        </p>
+              {posts.map((post) => (
+                <Card key={post.id}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Avatar>
+                         
+                        </Avatar>
+                        <div>
+                          
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Instructor
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Instructor
+                          Posted {new Date(post.createdAt).toLocaleTimeString()}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 2 hours ago
-                      </p>
+                  </CardHeader>
+                  <CardContent>
+                    <h3 className="text-lg font-semibold">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {post.content}
+                    </p>
+                  </CardContent>
+                  {post.files && post.files.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-md font-medium">Related Files:</h4>
+                      <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
+                        {post.files.map((file, index) => (
+                          <li key={index}>
+                            <a
+                              href={file}
+                              className="text-blue-500 hover:underline text-md font-medium"
+                            >
+                              {file}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <h3 className="text-lg font-semibold">
-                    Lecture 1: Introduction to Computer Science
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    In this lecture, we will cover the fundamentals of computer
-                    science, including hardware, software, and programming
-                    concepts.
-                  </p>
-                </CardContent>
-                <div className="mt-4">
-                  <h4 className="text-md font-medium">Related Files:</h4>
-                  <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
-                    <li>
-                      <a
-                        href="/files/c.pdf"
-                        className="text-blue-500 hover:underline text-md font-medium"
-                      >
-                        First-File.pdf
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          John Doe
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Instructor
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 1 day ago
-                      </p>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <h3 className="text-lg font-semibold">
-                    Lecture 2: Data Structures and Algorithms
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    In this lecture, we will explore the fundamental data
-                    structures and algorithms used in computer science.
-                  </p>
-                </CardContent>
-              </Card>
+                  )}
+                </Card>
+              ))}
             </div>
           </div>
         </section>
@@ -199,6 +182,17 @@ export default function Feed() {
       <Footer />
     </div>
   );
+}
+
+interface Post {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isDeleted: boolean;
+  title: string;
+  content: string;
+  files: string[]; // Assuming files is a string, adjust as necessary
 }
 
 function BellIcon(props) {

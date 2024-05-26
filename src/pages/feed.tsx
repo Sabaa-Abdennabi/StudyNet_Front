@@ -24,29 +24,19 @@ export default function Feed() {
   const [notifications, setNotifications] = useState<notif[]>([]); 
 
   useEffect(() => {
-    
-    console.log("useEffect called");
-    
-    const url = 'http://localhost:3000/posts/sse';
-    const eventSource = new EventSource(url, { withCredentials: true });
-    console.log(eventSource)
-    eventSource.onmessage = (event) => {
-      console.log("Event received:", event.data);
-      const data = JSON.parse(event.data);
-      console.log('Received data:', data);
-      setNotifications((prevNotifications) => [...prevNotifications, data]);
-    };
-    eventSource.onerror = (error) => {
-      console.error('EventSource failed:', error);
-      // You can add additional error handling logic here
-    };
-  
-    console.log("EventSource created");
-    // Cleanup function to close EventSource when the component unmounts
-    return () => {
-      console.log("Cleaning up EventSource");
-      eventSource.close();
-    };
+
+    async function fetchPosts() {
+      try {
+        // Assuming studentId is available through authentication or user context
+        const studentId = "student-id"; // Replace with actual student ID
+        const response = await axios.get<Post[]>(`http://localhost:3000/students/${studentId}/posts`);
+        setPosts(response.data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    }
+
+    fetchPosts();
   }, []);
 
   return (
@@ -121,21 +111,21 @@ export default function Feed() {
               </p>
             </div>
             <div className="grid gap-4">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          John Doe
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Instructor
-                        </p>
+              {posts.map((post) => (
+                <Card key={post.id}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Avatar>
+                          <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
+                          <AvatarFallback>{post.author.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium">{post.author.name}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Instructor
+                          </p>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -186,10 +176,28 @@ export default function Feed() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 1 day ago
-                      </p>
+                  </CardHeader>
+                  <CardContent>
+                    <h3 className="text-lg font-semibold">{post.title}</h3>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {post.content}
+                    </p>
+                  </CardContent>
+                  {post.files && post.files.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-md font-medium">Related Files:</h4>
+                      <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
+                        {post.files.map((file, index) => (
+                          <li key={index}>
+                            <a
+                              href={file}
+                              className="text-blue-500 hover:underline text-md font-medium"
+                            >
+                              {file}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </CardHeader>
@@ -210,6 +218,20 @@ export default function Feed() {
       <Footer />
     </div>
   );
+}
+interface Post {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  isDeleted: boolean;
+  title: string;
+  content: string;
+  files: string[]; // Assuming files is a string, adjust as necessary
+  author: {
+    name: string;
+    avatarUrl: string;
+  };
 }
 
 function BellIcon(props) {

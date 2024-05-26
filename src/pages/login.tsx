@@ -18,9 +18,10 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       console.log(JSON.stringify({ email, password }));
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch("http://localhost:3001/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,26 +34,31 @@ export default function Login() {
         console.error("Login failed:", response.statusText);
         return;
       }
-      console.log(response);
       if (response.status === 201) {
-        console.log("Login successful (status 201)");
-        router.push("/home");
-      }
-      const Token = await response.text();
-      try {
-        //decode the token
-        const decodedToken: DecodedToken = jwtDecode(Token);
-        const { id, role, email } = decodedToken;
 
-        //get the infos needed and set the token in localstorage
-        const userDetails = { id, role, email };
-        localStorage.setItem("token", Token);
+        const Token = await response.text();
 
-        //set the user in state
-        localStorage.setItem("user", JSON.stringify(userDetails));
+        try {
 
-      } catch (error) {
-        console.error("Failed to decode token:", error);
+          //decode the token
+          const decodedToken: DecodedToken = jwtDecode(Token);
+          const { id, role, email } = decodedToken;
+
+          //get the infos needed and set the token in localstorage
+          const userDetails = { id, role, email };
+          localStorage.setItem("token", Token);
+
+          //set the user in state
+          localStorage.setItem("user", JSON.stringify(userDetails));
+
+          if(userDetails.role === "TEACHER"){
+            router.push("/feedt");}
+          else if (userDetails.role === "STUDENT"){
+            router.push("/feed");}
+          
+        } catch (error) {
+          console.error("Failed to decode token:", error);
+        }
       }
     } catch (error) {
       console.error("An error occurred:", error);

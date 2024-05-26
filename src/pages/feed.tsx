@@ -12,6 +12,7 @@ import {
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { useEffect, useState } from "react";
+import { DecodedToken } from "@/lib/interface";
 
 interface notif {
   post: string;
@@ -23,6 +24,24 @@ interface notif {
 export default function Feed() {
 
   const [notifications, setNotifications] = useState<notif[]>([]); 
+  const [user, setUser] = useState<DecodedToken | null>(null);
+  const [Token, setToken] = useState<string | null>(null);
+
+  //the code needed to get the user from the localstorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (storedUser) {
+      setToken(token);
+      const userDetails: DecodedToken = JSON.parse(storedUser);
+      setUser(userDetails);
+      console.log(userDetails);
+    }
+  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+  }
 
   useEffect(() => {
 
@@ -94,6 +113,7 @@ export default function Feed() {
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
               href="/home"
+              onClick={handleLogout}
             >
               Log out
             </Link>

@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import "../app/globals.css";
 import { PopoverTrigger, PopoverContent, Popover } from "@/components/popover";
@@ -8,20 +9,27 @@ import {
   CardContent,
   Card,
 } from "@/components/card";
+import { jwtDecode } from 'jwt-decode';
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { Button } from "@/components/button";
 import { Footer } from "@/components/Footer";
+import { useState, useEffect } from "react";
+
+
 
 export default function Home() {
+
   return (
+
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex w-full max-w-6xl items-center justify-between">
           <Link className="flex items-center gap-2 font-semibold" href="/home">
             <BookIcon className="h-6 w-6" />
-            <span>studyNet</span>
-          </Link>
-          
+            <span>StudyNet
+            </span>          
+            </Link>
+
           <div className="flex items-center gap-4">
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
@@ -181,3 +189,5 @@ function BookIcon(props) {
     </svg>
   );
 }
+
+

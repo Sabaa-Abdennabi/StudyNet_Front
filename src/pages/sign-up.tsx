@@ -33,7 +33,7 @@ export default function SignUp() {
         lastName,
         email,
         password,
-        role,
+        level:"MPI",
       }),
     });
 

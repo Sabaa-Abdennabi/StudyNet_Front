@@ -16,37 +16,64 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+
   const handleSubmit = async (event) => {
+
     event.preventDefault();
+    
     if (role === "teacher") {
       var url = "http://localhost:3001/teachers";
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+        }),
+      });
+      if (response.status !== 201) {
+        console.error("Login failed:", response);
+        return;
+      }
+      if (response.status === 201) {
+        const data = await response.json();
+        console.log("Response:", data);
+        console.log("success");
+        router.push("/login");
+      }
     } else {
       var url = "http://localhost:3001/students";
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          password,
+          level: "MPI",
+        }),
+      });
+      if (response.status !== 201) {
+        console.error("Login failed:", response);
+        return;
+      }
+      if (response.status === 201) {
+        const data = await response.json();
+        console.log("Response:", data);
+        console.log("success");
+        router.push("/login");
+      }
     }
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        password,
-        role,
-      }),
-    });
-
-    if (response.status !== 201) {
-      console.error("Login failed:", response);
-      return;
-    }
-    if (response.status === 201) {
-    const data = await response.json();
-    console.log("Response:", data);
-    console.log("success");
-    router.push("/login");
-  };}
+    
+  };
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
       <header className="flex h-16 shrink-0 items-center border-b bg-white px-6 dark:border-gray-800 dark:bg-gray-900">

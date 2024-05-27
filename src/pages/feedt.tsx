@@ -153,7 +153,7 @@ export default function FeedTeacher() {
           <div className="mx-auto grid max-w-4xl gap-8">
             <div className="grid gap-2">
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Intro to Computer Science Feed
+                Welcome to StudyNet
               </h1>
               <p className="text-gray-500 dark:text-gray-400">
                 Add updates and announcements for this class.

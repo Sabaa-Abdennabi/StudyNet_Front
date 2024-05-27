@@ -52,7 +52,7 @@ export default function Login() {
           localStorage.setItem("user", JSON.stringify(userDetails));
 
           if(userDetails.role === "TEACHER"){
-            router.push("/feedt");}
+            router.push("/class");}
           else if (userDetails.role === "STUDENT"){
             router.push("/feed");}
           

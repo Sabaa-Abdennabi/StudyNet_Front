@@ -19,8 +19,8 @@ import { useState } from "react";
 
 export default function Class() {
   const router = useRouter();
-  const [className, setClassName] = useState('');
-  const [classDescription, setClassDescription] = useState('');
+  const [class_name, setClassName] = useState('');
+  const [description, setClassDescription] = useState('');
   const [level, setLevel] = useState('');
 
 
@@ -28,14 +28,23 @@ export default function Class() {
     event.preventDefault();
 
     try {
+      const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiN2RhNmExLTBlYzMtNGViZS04NDQ2LWE4ZTk2ZDgyYzYxMyIsImVtYWlsIjoic2FsaW1iYWtsb3V0aUBnbWFpbC5jb20iLCJyb2xlIjoiVEVBQ0hFUiIsImlhdCI6MTcxNjc2OTY3NiwiZXhwIjoxNzE3Mzc0NDc2fQ.uRUugGorvIKxnArbhFZJnWp8WBqVFCWuUBDAsBzSAqU"
       const formData = new FormData();
-      formData.append('className', className);
-      formData.append('classDescription', classDescription);
+      formData.append('class_name', class_name);
+      formData.append('description', description);
       formData.append('level',level)
 
-      const response = await fetch('http://localhost:3001/class/', {
+      const response = await fetch('http://localhost:3001/class', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          class_name,
+          description,
+          level,
+        }),
       });
 
       if (!response.ok) {
@@ -43,10 +52,10 @@ export default function Class() {
       }
   
       const data = await response.json();
-      console.log('Post created successfully:', data);
+      console.log('class created successfully:', data);
       router.push('/home'); // Redirect to home page after successful creation
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error('Error creating class:', error);
     }
   };
 
@@ -94,20 +103,20 @@ export default function Class() {
               <CardContent className="grid gap-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="className">Class Name</Label>
+                    <Label htmlFor="class_name">Class Name</Label>
                     <Input
-                      id="className"
+                      id="class_name"
                       placeholder="Intro to Computer Science"
-                      value={className}
+                      value={class_name}
                       onChange={(e) => setClassName(e.target.value)}
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="classDescription">Class Description</Label>
+                    <Label htmlFor="description">Class Description</Label>
                     <Textarea
-                      id="classDescription"
+                      id="description"
                       placeholder="Enter a description for your class"
-                      value={classDescription}
+                      value={description}
                       onChange={(e) => setClassDescription(e.target.value)}
                     />
                   </div>

@@ -12,47 +12,28 @@ import {
 } from "@/components/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { useEffect, useState } from "react";
-import { DecodedToken } from "@/lib/interface";
 
+import axios from "axios";
 interface notif {
   post: string;
- // user:string;
-  class:string;
+  // user:string;
+  class: string;
 }
 
-
 export default function Feed() {
-
-  const [notifications, setNotifications] = useState<notif[]>([]); 
-  const [user, setUser] = useState<DecodedToken | null>(null);
-  const [Token, setToken] = useState<string | null>(null);
-
-  //the code needed to get the user from the localstorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-    if (storedUser) {
-      setToken(token);
-      const userDetails: DecodedToken = JSON.parse(storedUser);
-      setUser(userDetails);
-      console.log(userDetails);
-    }
-  }, []);
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-  }
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-
     async function fetchPosts() {
       try {
         // Assuming studentId is available through authentication or user context
         const studentId = "student-id"; // Replace with actual student ID
-        const response = await axios.get<Post[]>(`http://localhost:3000/students/${studentId}/posts`);
+        const response = await axios.get<Post[]>(
+          `http://localhost:3000/students/${studentId}/posts`
+        );
         setPosts(response.data);
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error("Error fetching posts:", error);
       }
     }
 
@@ -89,22 +70,15 @@ export default function Feed() {
                       You have 3 unread messages.
                     </CardDescription>
                   </CardHeader>
-                  {notifications.map((notification, index) => (
-                  <CardContent  key={index}  className="p-6">
-              
+                  <CardContent className="p-6">
                     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
                       <span className="flex h-2 w-2 translate-y-1.5 rounded-full bg-blue-500" />
                       <div className="grid gap-1">
-                        <p className="text-sm font-medium">
-                        {notification.class}
-                        </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {notification.post}
-                        </p>
+                        <p className="text-sm font-medium"></p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400"></p>
                       </div>
-                    </div> 
+                    </div>
                   </CardContent>
-                  ))}
                 </Card>
               </PopoverContent>
             </Popover>
@@ -113,7 +87,6 @@ export default function Feed() {
             <Link
               className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
               href="/home"
-              onClick={handleLogout}
             >
               Log out
             </Link>
@@ -138,62 +111,24 @@ export default function Feed() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Avatar>
-                          <AvatarImage src={post.author.avatarUrl} alt={post.author.name} />
+                          <AvatarImage
+                            src={post.author.avatarUrl}
+                            alt={post.author.name}
+                          />
                           <AvatarFallback>{post.author.name[0]}</AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="text-sm font-medium">{post.author.name}</p>
+                          <p className="text-sm font-medium">
+                            {post.author.name}
+                          </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
                             Instructor
                           </p>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Posted 2 hours ago
-                      </p>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <h3 className="text-lg font-semibold">
-                    Lecture 1: Introduction to Computer Science
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    In this lecture, we will cover the fundamentals of computer
-                    science, including hardware, software, and programming
-                    concepts.
-                  </p>
-                </CardContent>
-                <div className="mt-4">
-                  <h4 className="text-md font-medium">Related Files:</h4>
-                  <ul className="list-disc list-inside text-gray-500 dark:text-gray-400">
-                    <li>
-                      <a
-                        href="/files/c.pdf"
-                        className="text-blue-500 hover:underline text-md font-medium"
-                      >
-                        First-File.pdf
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage src="/avatars/01.png" />
-                        <AvatarFallback>JD</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium leading-none">
-                          John Doe
-                        </p>
+                      <div className="flex items-center gap-2">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Instructor
+                          Posted 2 hours ago
                         </p>
                       </div>
                     </div>
@@ -220,18 +155,9 @@ export default function Feed() {
                         ))}
                       </ul>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <h3 className="text-lg font-semibold">
-                    Lecture 2: Data Structures and Algorithms
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    In this lecture, we will explore the fundamental data
-                    structures and algorithms used in computer science.
-                  </p>
-                </CardContent>
-              </Card>
+                  )}
+                </Card>
+              ))}
             </div>
           </div>
         </section>

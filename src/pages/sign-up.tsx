@@ -16,12 +16,13 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+  const [serverError, setServerError] = useState('');
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (role === "teacher") {
-      var url = "http://localhost:3001/teachers";
+      var url = "http://localhost:3000/teachers";
     } else {
-      var url = "http://localhost:3001/students";
+      var url = "http://localhost:3000/students";
     }
     const response = await fetch(url, {
       method: "POST",
@@ -38,7 +39,9 @@ export default function SignUp() {
     });
 
     if (response.status !== 201) {
+      const data = await response.json();
       console.error("Login failed:", response);
+      setServerError(data.message);
       return;
     }
     if (response.status === 201) {
@@ -99,6 +102,7 @@ export default function SignUp() {
                         onChange={(e) => setFirstName(e.target.value)}
                       />
                     </div>
+
                     <div className="grid gap-2">
                       <Label htmlFor="lastName">Last Name</Label>
                       <Input
@@ -157,6 +161,7 @@ export default function SignUp() {
 
                   <Button className="w-full">Sign Up</Button>
                 </CardContent>
+                {serverError && <p className="text-red-700">{serverError}</p>}
               </form>
             </Card>
           </div>

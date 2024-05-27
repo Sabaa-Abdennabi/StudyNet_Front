@@ -17,7 +17,7 @@ import { Textarea } from "@/components/textarea";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DecodedToken } from "@/lib/interface";
-
+import { BACKEND_URL } from "@/lib/const";
 export default function Class() {
   const router = useRouter();
   const [class_name, setClass_name] = useState("");
@@ -45,7 +45,7 @@ export default function Class() {
 
     try {
       console.log(Token);
-      const response = await fetch("http://localhost:3001/class/", {
+      const response = await fetch(`${BACKEND_URL}/class/`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${Token}`,

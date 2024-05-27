@@ -9,6 +9,7 @@ import { Input } from "@/components/input";
 import { Footer } from "@/components/Footer";
 import { useState } from "react";
 import router from "next/router";
+import { BACKEND_URL } from "@/lib/const";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -16,63 +17,56 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-
+  const [level, setLevel] = useState("");
+  const [serverError, setServerError] = useState("");
   const handleSubmit = async (event) => {
 
     event.preventDefault();
     
     if (role === "teacher") {
-      var url = "http://localhost:3001/teachers";
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-        }),
+      var url = `${BACKEND_URL}/teachers`;
+      var bodycontent = JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
       });
-      if (response.status !== 201) {
-        console.error("Login failed:", response);
-        return;
-      }
-      if (response.status === 201) {
-        const data = await response.json();
-        console.log("Response:", data);
-        console.log("success");
-        router.push("/login");
-      }
     } else {
-      var url = "http://localhost:3001/students";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-          level: "MPI",
-        }),
+      var url = `${BACKEND_URL}/students`;
+      JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+        level: "MPI",
       });
-      if (response.status !== 201) {
-        console.error("Login failed:", response);
-        return;
-      }
-      if (response.status === 201) {
-        const data = await response.json();
-        console.log("Response:", data);
-        console.log("success");
-        router.push("/login");
-      }
     }
-    
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+        level: "MPI",
+      }),
+    });
+
+    if (response.status !== 201) {
+      const data = await response.json();
+      console.error("Login failed:", response);
+      setServerError(data.message);
+      return;
+    }
+    if (response.status === 201) {
+      const data = await response.json();
+      console.log("Response:", data);
+      console.log("success");
+      router.push("/login");
+    }
   };
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
@@ -126,6 +120,7 @@ export default function SignUp() {
                         onChange={(e) => setFirstName(e.target.value)}
                       />
                     </div>
+
                     <div className="grid gap-2">
                       <Label htmlFor="lastName">Last Name</Label>
                       <Input
@@ -180,10 +175,22 @@ export default function SignUp() {
                       />
                       I am a student
                     </Label>
+                    {role === "student" && (
+                      <div className="grid gap-2">
+                        <Label htmlFor="level"> Level </Label>
+                        <Input
+                          id="text"
+                          type="text"
+                          value={level}
+                          onChange={(e) => setLevel(e.target.value)}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <Button className="w-full">Sign Up</Button>
                 </CardContent>
+                {serverError && <p className="text-red-700">{serverError}</p>}
               </form>
             </Card>
           </div>

@@ -10,18 +10,20 @@ import { Footer } from "@/components/Footer";
 import { useState } from "react";
 import router from "next/router";
 import { jwtDecode } from "jwt-decode";
+import { BACKEND_URL } from "@/lib/const";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<DecodedToken | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
       console.log(JSON.stringify({ email, password }));
-      const response = await fetch("http://localhost:3001/auth/login", {
+      const response = await fetch(`${BACKEND_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,12 +33,16 @@ export default function Login() {
 
       if (!response.ok) {
         console.log(response);
+        setError("Invalid email or password provided . Please try again");
         console.error("Login failed:", response.statusText);
+
         return;
       }
       if (response.status === 201) {
-
+        console.log("hedhye response ",response);
         const Token = await response.text();
+
+        console.log("hedhye s7i7aaa ",Token);
 
         try {
 
@@ -99,7 +105,7 @@ export default function Login() {
                 Login to studyNet
               </h1>
               <p className="text-gray-500 dark:text-gray-400">
-                Enter your credentials to access your account.
+                {error? error:"Enter your credentials to access your account"}
               </p>
             </div>
             <Card>

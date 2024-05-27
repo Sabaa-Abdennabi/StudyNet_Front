@@ -27,11 +27,10 @@ export default function FeedTeacher() {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [classe, setClasse] = useState("");
-
+  const [posts, setPosts] = useState([]);
   //retrive the user from the localstorage
-
   const [user, setUser] = useState<DecodedToken | null>(null);
-  const [Token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   //the code needed to get the user from the localstorage
   useEffect(() => {
@@ -53,27 +52,61 @@ export default function FeedTeacher() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
   }
+  useEffect(() => {
+    // Function to fetch posts
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/posts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch posts');
+        }
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    };
 
+    // Call the fetchPosts function when the component mounts
+    fetchPosts();
+  }, []); // Empty dependency array ensures this effect runs only once on mount
+  const handleDownload = async (fileUrl) => {
+    try {
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'file');
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("classeName", classe);
+    formData.append("class_name", classe);
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
     }
-
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }
     try {
       const response = await fetch(`${BACKEND_URL}/posts`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${Token}`, // Include the token in the Authorization header
-        },
         body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      console.log(response, "response",Token, "token")
+      console.log(response, "response",token, "token")
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -122,7 +155,7 @@ export default function FeedTeacher() {
           <div className="mx-auto grid max-w-4xl gap-8">
             <div className="grid gap-2">
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Intro to Computer Science Feed
+                Welcome to StudyNet
               </h1>
               <p className="text-gray-500 dark:text-gray-400">
                 Add updates and announcements for this class.
@@ -194,6 +227,26 @@ export default function FeedTeacher() {
                   </form>
                 </CardContent>
               </Card>
+              {/* Card components for each post */}
+      {posts.map((post) => (
+        <Card key={post.id}>
+          <CardHeader>
+            <h3 className="text-lg font-semibold">{post.title}</h3>
+            <h2 className="text-lg font-semibold">{post.class_name}</h2>
+          </CardHeader>
+          <CardContent>
+            <p>{post.content}</p>
+            {/* Render files here */}
+            <ul>
+              {post.files.map((file, index) => (
+                <li key={index}>
+                  <a onClick={() => handleDownload(file)}>{file}</a>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      ))}
             </div>
           </div>
         </section>

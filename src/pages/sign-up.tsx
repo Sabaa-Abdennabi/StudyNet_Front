@@ -20,7 +20,9 @@ export default function SignUp() {
   const [level, setLevel] = useState("");
   const [serverError, setServerError] = useState("");
   const handleSubmit = async (event) => {
+
     event.preventDefault();
+    
     if (role === "teacher") {
       var url = `${BACKEND_URL}/teachers`;
       var bodycontent = JSON.stringify({

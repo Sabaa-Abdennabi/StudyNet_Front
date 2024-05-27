@@ -1,4 +1,4 @@
-import Link from "next/link";
+// import Link from "next/link";
 import "../app/globals.css";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/button";
@@ -14,6 +14,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { useEffect, useState } from "react";
 
 import axios from "axios";
+import Link from "next/link";
 import { BACKEND_URL } from "@/lib/const";
 interface notif {
   post: string;

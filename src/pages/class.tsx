@@ -15,41 +15,57 @@ import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { Textarea } from "@/components/textarea";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { DecodedToken } from "@/lib/interface";
 
 export default function Class() {
   const router = useRouter();
-  const [className, setClassName] = useState('');
-  const [classDescription, setClassDescription] = useState('');
-  const [level, setLevel] = useState('');
+  const [class_name, setClass_name] = useState("");
+  const [description, setDescription] = useState("");
+  const [level, setLevel] = useState("");
+  //retrive the user from the localstorage
 
+  const [user, setUser] = useState<DecodedToken | null>(null);
+  const [Token, setToken] = useState<string | null>(null);
+
+  //the code needed to get the user from the localstorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (storedUser) {
+      setToken(token);
+      const userDetails: DecodedToken = JSON.parse(storedUser);
+      setUser(userDetails);
+      console.log(userDetails);
+    }
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const formData = new FormData();
-      formData.append('className', className);
-      formData.append('classDescription', classDescription);
-      formData.append('level',level)
-
-      const response = await fetch('http://localhost:3001/class/', {
-        method: 'POST',
-        body: formData
+      console.log(Token);
+      const response = await fetch("http://localhost:3001/class/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${Token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ class_name, description, level }),
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        console.log("cant create class", response);
+        return;
       }
-  
+
       const data = await response.json();
-      console.log('Post created successfully:', data);
-      router.push('/home'); // Redirect to home page after successful creation
+      console.log("Class created successfully:", data);
+      router.push("/feedt");
     } catch (error) {
-      console.error('Error creating post:', error);
+      console.error("Error creating Class:", error);
     }
   };
-
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100 dark:bg-gray-950">
@@ -90,40 +106,44 @@ export default function Class() {
               </p>
             </div>
             <form onSubmit={handleSubmit}>
-            <Card>
-              <CardContent className="grid gap-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="className">Class Name</Label>
-                    <Input
-                      id="className"
-                      placeholder="Intro to Computer Science"
-                      value={className}
-                      onChange={(e) => setClassName(e.target.value)}
-                    />
+              <Card>
+                <CardContent className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="className">Class Name</Label>
+                      <Input
+                        id="className"
+                        placeholder="Intro to Computer Science"
+                        value={class_name}
+                        onChange={(e) => setClass_name(e.target.value)}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="classDescription">
+                        Class Description
+                      </Label>
+                      <Textarea
+                        id="classDescription"
+                        placeholder="Enter a description for your class"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="Level">Class Level</Label>
+                      <Input
+                        id="level"
+                        placeholder="MPI"
+                        value={level}
+                        onChange={(e) => setLevel(e.target.value)}
+                      />
+                    </div>
                   </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="classDescription">Class Description</Label>
-                    <Textarea
-                      id="classDescription"
-                      placeholder="Enter a description for your class"
-                      value={classDescription}
-                      onChange={(e) => setClassDescription(e.target.value)}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="Level">Class Level</Label>
-                    <Input
-                      id="level"
-                      placeholder="MPI"
-                      value={level}
-                      onChange={(e) => setLevel(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <Button type="submit" className="w-full">Create Class</Button>
-              </CardContent>
-            </Card>
+                  <Button type="submit" className="w-full">
+                    Create Class
+                  </Button>
+                </CardContent>
+              </Card>
             </form>
           </div>
         </section>

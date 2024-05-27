@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import { useState } from "react";
 import router from "next/router";
 import { jwtDecode } from "jwt-decode";
+import { BACKEND_URL } from "@/lib/const";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ export default function Login() {
 
     try {
       console.log(JSON.stringify({ email, password }));
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(`${BACKEND_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +58,7 @@ export default function Login() {
           localStorage.setItem("user", JSON.stringify(userDetails));
 
           if(userDetails.role === "TEACHER"){
-            router.push("/feedt");}
+            router.push("/class");}
           else if (userDetails.role === "STUDENT"){
             router.push("/feed");}
           

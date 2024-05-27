@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 
 import { Textarea } from "@/components/textarea";
 import { DecodedToken } from "@/lib/interface";
+import { BACKEND_URL } from "@/lib/const";
 export default function FeedTeacher() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -65,13 +66,14 @@ export default function FeedTeacher() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/posts", {
+      const response = await fetch(`${BACKEND_URL}/posts`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${Token}`, // Include the token in the Authorization header
         },
         body: formData,
       });
+      console.log(response, "response",Token, "token")
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

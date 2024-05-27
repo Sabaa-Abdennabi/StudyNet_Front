@@ -14,6 +14,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/avatar";
 import { useEffect, useState } from "react";
 
 import axios from "axios";
+import { BACKEND_URL } from "@/lib/const";
 interface notif {
   post: string;
   // user:string;
@@ -29,7 +30,7 @@ export default function Feed() {
         // Assuming studentId is available through authentication or user context
         const studentId = "student-id"; // Replace with actual student ID
         const response = await axios.get<Post[]>(
-          `http://localhost:3000/students/${studentId}/posts`
+          `${BACKEND_URL}/students/${studentId}/posts`
         );
         setPosts(response.data);
       } catch (error) {
@@ -49,13 +50,6 @@ export default function Feed() {
             <span>studyNet</span>
           </Link>
           <nav className="hidden gap-4 md:flex">
-            <Link
-              className="inline-flex h-9 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50"
-              href="/joinClass"
-            >
-              Join Class
-            </Link>
-
             <Popover>
               <PopoverTrigger asChild>
                 <Button className="rounded-full" size="icon" variant="ghost">
@@ -66,9 +60,7 @@ export default function Feed() {
                 <Card className="shadow-none border-0">
                   <CardHeader className="border-b">
                     <CardTitle>Notifications</CardTitle>
-                    <CardDescription>
-                      You have 3 unread messages.
-                    </CardDescription>
+                    <CardDescription>You have unread messages.</CardDescription>
                   </CardHeader>
                   <CardContent className="p-6">
                     <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
@@ -98,10 +90,10 @@ export default function Feed() {
           <div className="mx-auto grid max-w-4xl gap-8">
             <div className="grid gap-2">
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Intro to Computer Science
+                Explore your classes on StudyNet
               </h1>
               <p className="text-gray-500 dark:text-gray-400">
-                View updates and announcements for this class.
+                View updates and announcements for your class.
               </p>
             </div>
             <div className="grid gap-4">
